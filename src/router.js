@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login'
+import Index from '@/views/Index'
+
 
 
 
@@ -12,6 +14,6 @@ export default new Router({
   routes: [
        // 登录页
        { path: "/login", component: Login},
-
+       { path: "/", component: Index},
   ]
 })
