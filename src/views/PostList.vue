@@ -34,6 +34,14 @@
         </template>
       </el-table-column>
     </el-table>
+    <!-- 分页 -->
+    <!-- size-change：条数切换时候触发的函数
+    current-change：当前页数切换时候触发的函数
+    current-page：当前的页数
+    page-sizes：页面条数的列表
+    page-size: 当前页面的条数
+    layout：布局列表，默认就行
+    total：全部的条数-->
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -77,8 +85,8 @@ export default {
         this.getList();
       });
     },
+     // 请求文章列表
     getList() {
-      // 请求文章列表
       this.$axios({
         url: `/post?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
       }).then(res => {
@@ -92,7 +100,6 @@ export default {
       // 请求文章列表的数据
       this.getList();
     },
-
     // 切换页数时候触发
     handleCurrentChange(val) {
       this.pageIndex = val;
