@@ -18,9 +18,9 @@ export default new Router({
        // 登录页
        { path: "/login", component: Login},
        //后台首页
-       { path: "/", component: Index, children: [
-        { path: "post_list", component: PostList},
-        { path: "post_add", component: PostAdd}
+       { path: "/", component: Index,meta:"首页", children: [
+        { path: "post_list", component: PostList,meta:"文章列表"},
+        { path: "post_add", component: PostAdd,meta:"发布文章"}
       ]}
   ]
 })
