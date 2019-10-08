@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login'
 import Index from '@/views/Index'
+import PostList from "@/views/PostList";
+import PostAdd from "@/views/PostAdd";
+
 
 
 
@@ -14,6 +17,10 @@ export default new Router({
   routes: [
        // 登录页
        { path: "/login", component: Login},
-       { path: "/", component: Index},
+       //后台首页
+       { path: "/", component: Index, children: [
+        { path: "post_list", component: PostList},
+        { path: "post_add", component: PostAdd}
+      ]}
   ]
 })
