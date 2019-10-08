@@ -1,38 +1,49 @@
 <template>
-  <el-table :data="tableData" style="width: 100%">
-    <el-table-column label="序号" width="60">
-      <template slot-scope="scope">
-        <span style="margin-left: 10px">{{scope.$index + 1}}</span>
-      </template>
-    </el-table-column>
+  <div>
+    <el-table :data="tableData" style="width: 100%">
+      <el-table-column label="序号" width="60">
+        <template slot-scope="scope">
+          <span style="margin-left: 10px">{{scope.$index + 1}}</span>
+        </template>
+      </el-table-column>
 
-    <el-table-column label="标题" width="300">
-      <template slot-scope="scope">{{ scope.row.title }}</template>
-    </el-table-column>
+      <el-table-column label="标题" width="300">
+        <template slot-scope="scope">{{ scope.row.title }}</template>
+      </el-table-column>
 
-    <el-table-column label="显示" width="100">
-      <template slot-scope="scope">
-        <span>{{scope.row.open === 1 ? '打开': '关闭'}}</span>
-      </template>
-    </el-table-column>
+      <el-table-column label="显示" width="100">
+        <template slot-scope="scope">
+          <span>{{scope.row.open === 1 ? '打开': '关闭'}}</span>
+        </template>
+      </el-table-column>
 
-    <el-table-column label="类型" width="100">
-      <template slot-scope="scope">
-         <span>{{scope.row.type === 1 ? '文章': '视频'}}</span>
-      </template>
-    </el-table-column>
+      <el-table-column label="类型" width="100">
+        <template slot-scope="scope">
+          <span>{{scope.row.type === 1 ? '文章': '视频'}}</span>
+        </template>
+      </el-table-column>
 
-    <el-table-column label="操作">
-      <template slot-scope="scope">
-        <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-        <el-button
-          size="mini"
-          :type="scope.row.open === 0 ? 'success': 'danger'"
-          @click="handleDelete(scope.$index, scope.row)"
-        >{{scope.row.open === 0 ? '打开': '关闭'}}</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column label="操作">
+        <template slot-scope="scope">
+          <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button
+            size="mini"
+            :type="scope.row.open === 0 ? 'success': 'danger'"
+            @click="handleDelete(scope.$index, scope.row)"
+          >{{scope.row.open === 0 ? '打开': '关闭'}}</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageIndex"
+      :page-sizes="[5, 10, 15]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+    ></el-pagination>
+  </div>
 </template>
 
 <script>
@@ -75,6 +86,18 @@ export default {
 
         this.tableData = data;
       });
+    },
+    handleSizeChange(val) {
+      this.pageSize = val;
+      // 请求文章列表的数据
+      this.getList();
+    },
+
+    // 切换页数时候触发
+    handleCurrentChange(val) {
+      this.pageIndex = val;
+      // 请求文章列表的数据
+      this.getList();
     }
   },
   mounted() {
