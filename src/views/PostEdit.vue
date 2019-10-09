@@ -41,6 +41,7 @@
              Authorization: token
           }"
           list-type="picture-card"
+          :file-list="form.cover"
           :on-success="handleSuccess"
           :on-remove="handleRemove"
         >
@@ -49,7 +50,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">立即创建</el-button>
+        <el-button type="primary" @click="onSubmit">确认修改</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -103,59 +104,72 @@ export default {
     };
   },
   mounted() {
+    this.$axios({
+      url: "/category"
+    }).then(res => {
+      const { data } = res.data;
+
+      this.allCate = data;
+    });
+
     const id = this.$route.params.id;
     this.$axios({
       url: "/post/" + id,
       headers: {
         Authorization: JSON.parse(localStorage.getItem("user") || `{}`).token
-      },
-    }).then(res=>{
-        const {data} =res.data
+      }
+    }).then(res => {
+      const { data } = res.data;
+      console.log(data);
 
-        this.form={
-            title:data.title,
-            content:"",
-            cover:data.cover,
-            type:data.type
+      this.form = {
+        title: data.title,
+        content: "",
+        cover: [],
+        type: data.type
+      };
+
+      data.cover.forEach(item => {
+        if (item.url.indexOf("http") === -1) {
+          item.url = this.$axios.defaults.baseURL + item.url;
         }
-    })
+        this.form.cover.push(item);
+      });
+
+      this.$refs.vueEditor.editor.clipboard.dangerouslyPasteHTML(
+        0,
+        data.content
+      );
+    });
   },
   methods: {
     onSubmit() {
       console.log(this.form);
-      const { categories } = this.form;
-      this.form.categories = [];
-
-      // 给栏目把数字转换成接口需要的对象
-      categories.forEach(v => {
-        this.form.categories.push({
-          id: v
-        });
-      });
+      if (this.form.type === 1) {
+        this.form.content = this.$refs.vueEditor.editor.root.innerHTML;
+      }
 
       this.$axios({
-        url: "/post",
+        url: "/post_update/" + this.$route.params.id,
         method: "POST",
         headers: {
           Authorization: JSON.parse(localStorage.getItem("user") || `{}`).token
         },
         data: this.form
       }).then(res => {
-        console.log(123);
+        console.log(res);
         const { message } = res.data;
 
         this.$message.success(message);
       });
-
-      if (this.form.type === 1) {
-        this.form.content = this.$refs.vueEditor.editor.root.innerHTML;
-      }
     },
 
     handleSuccess(res, file) {
       this.form.cover.push({
-        id: res.data.id
+        id: res.data.id,
+        url: this.$axios.defaults.baseURL + res.data.url
       });
+      console.log(res);
     },
     //上传视频成功
     handleVideoSuccess(res) {
@@ -164,17 +178,7 @@ export default {
     },
     // 移除图片时候触发的函数
     handleRemove(file, fileList) {
-      const id = file.response.data.id;
-      const arr = [];
-
-      this.form.cover.forEach(v => {
-        // 从cover中删除掉已经移除的图片
-        if (v.id !== id) {
-          arr.push(v);
-        }
-      });
-
-      this.form.cover = arr;
+      this.form.cover = fileList;
     }
   }
 };

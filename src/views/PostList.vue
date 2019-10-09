@@ -26,6 +26,7 @@
       <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          <el-button size="mini" @click="handleDell">删除</el-button>
           <el-button
             size="mini"
             :type="scope.row.open === 0 ? 'success': 'danger'"
@@ -66,7 +67,7 @@ export default {
   },
   methods: {
     handleEdit(index, row) {
-      this.$router.push('/post_edit/'+row.id)
+      this.$router.push("/post_edit/" + row.id);
     },
     handleDelete(index, row) {
       this.$axios({
@@ -85,7 +86,7 @@ export default {
         this.getList();
       });
     },
-     // 请求文章列表
+    // 请求文章列表
     getList() {
       this.$axios({
         url: `/post?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`
@@ -105,6 +106,9 @@ export default {
       this.pageIndex = val;
       // 请求文章列表的数据
       this.getList();
+    },
+    handleDell(){
+      
     }
   },
   mounted() {

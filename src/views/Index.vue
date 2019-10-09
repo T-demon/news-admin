@@ -34,7 +34,7 @@
       <el-header>
         <img :src="$axios.defaults.baseURL + user.user.head_img" alt class="head" />
         <span>{{ user.user.nickname }}</span>
-        <span>退出</span>
+        <span @click="handleout" style="cursor:pointer">退出</span>
       </el-header>
       <!-- 子页面显示的内容 -->
       <el-main>
@@ -64,7 +64,12 @@ export default {
     }
   },
 
-  mounted() {}
+  methods:{
+    handleout(){
+      localStorage.removeItem("user")
+       this.$router.push("/login");
+    }
+  }
 };
 </script>
 
