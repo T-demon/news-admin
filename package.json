@@ -14,7 +14,8 @@
     "less-loader": "^5.0.0",
     "vant": "^2.2.5",
     "vue": "^2.6.10",
-    "vue-router": "^3.0.3"
+    "vue-router": "^3.0.3",
+    "vue-word-editor": "^0.0.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.11.0",

@@ -25,7 +25,9 @@
 
       <el-table-column label="操作">
         <template slot-scope="scope">
+          <router-link to="/Post_Add">
           <el-button size="mini" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+          </router-link>
           <el-button
             size="mini"
             :type="scope.row.open === 0 ? 'success': 'danger'"
